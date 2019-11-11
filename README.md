@@ -1,5 +1,5 @@
 # TR Creator
-Create TR files
+Create TR files from BTT Recorder projects
 
 # Requirements
 
