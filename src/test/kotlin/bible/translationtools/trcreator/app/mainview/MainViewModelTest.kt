@@ -1,21 +1,29 @@
 package bible.translationtools.trcreator.app.mainview
 
+import bible.translationtools.trcreator.TestUtils
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import tornadofx.ViewModel
 import java.io.File
 
 
 class MainViewModelTest: ViewModel() {
-    private val mainViewModel: MainViewModel by inject()
-    private val subscriber = TestObserver<Unit>()
-    private val target: File = File("parent", "child")
+
+    private val viewModel: MainViewModel by inject()
+
+    @Rule
+    @JvmField
+    val tempFolder = TemporaryFolder()
 
     @Test
     fun createTrFromDir() {
-        val observable: Observable<Unit> = Observable.fromCallable {
-            mainViewModel.trFromDirectory(target)
+        val subscriber = TestObserver<Unit>()
+        val srcDir: File = tempFolder.newFolder("testfolder")
+        val observable = Observable.fromCallable {
+            viewModel.trFromDirectory(srcDir)
         }
 
         observable.subscribe(subscriber)
@@ -26,8 +34,16 @@ class MainViewModelTest: ViewModel() {
 
     @Test
     fun createTrFromZip() {
-        val observable: Observable<Unit> = Observable.fromCallable {
-            mainViewModel.trFromZip(target)
+        val subscriber = TestObserver<Unit>()
+        val files = arrayOf(
+            tempFolder.newFile("01.wav"),
+            tempFolder.newFile("02.wav"),
+            tempFolder.newFile("03.wav")
+        )
+        val zip = tempFolder.newFile("test.zip")
+        TestUtils.makeZipFile(files, zip)
+        val observable = Observable.fromCallable {
+            viewModel.trFromZip(zip)
         }
 
         observable.subscribe(subscriber)

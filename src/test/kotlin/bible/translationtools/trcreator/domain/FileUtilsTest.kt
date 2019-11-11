@@ -1,12 +1,11 @@
 package bible.translationtools.trcreator.domain
 
+import bible.translationtools.trcreator.TestUtils
 import io.reactivex.observers.TestObserver
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import java.io.*
-import java.util.zip.ZipOutputStream
-import java.util.zip.ZipEntry
 
 
 class FileUtilsTest {
@@ -63,24 +62,12 @@ class FileUtilsTest {
             tempFolder.newFile("03.wav")
         )
         val zip = tempFolder.newFile("test.zip")
-        makeZipFile(files, zip)
+        TestUtils.makeZipFile(files, zip)
 
         FileUtils().unzip(zip)
             .subscribe(subscriber)
 
         subscriber.assertNoErrors()
         subscriber.assertComplete()
-    }
-
-    private fun makeZipFile(srcFiles: Array<File>, targetFile: File) {
-        var out = ZipOutputStream(BufferedOutputStream(FileOutputStream(targetFile)))
-        for (file in srcFiles) {
-            var origin = BufferedInputStream(FileInputStream(file))
-            var entry = ZipEntry(file.name)
-            out.putNextEntry(entry)
-            origin.copyTo(out, 1024)
-            origin.close()
-        }
-        out.close()
     }
 }
