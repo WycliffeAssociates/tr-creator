@@ -10,7 +10,7 @@ javafx {
 }
 
 group 'bible.translationtools'
-version '1.0'
+version '1.1'
 
 repositories {
     mavenCentral()
@@ -18,12 +18,17 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.50"
     implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
     implementation 'com.github.thomasnield:rxkotlinfx:2.2.2'
     implementation 'no.tornado:tornadofx:1.7.19'
     implementation files('src/main/lib/archive_of_holding_0.9.1.jar')
+
+    //OpenJFX cross-platform fat jar dependencies
+    runtimeOnly "org.openjfx:javafx-graphics:0.0.8:win"
+    runtimeOnly "org.openjfx:javafx-graphics:0.0.8:linux"
+    runtimeOnly "org.openjfx:javafx-graphics:0.0.8:mac"
 
     //FontAwesomeFX
     implementation "de.jensd:fontawesomefx-commons:9.1.2"
@@ -37,9 +42,11 @@ sourceCompatibility = 11
 
 compileKotlin {
     kotlinOptions.jvmTarget = "11"
+    kotlinOptions.allWarningsAsErrors = true
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "11"
+    kotlinOptions.allWarningsAsErrors = true
 }
 
 jar {
