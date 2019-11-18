@@ -44,6 +44,9 @@ class MainViewStyles : Stylesheet() {
 
         progress {
             alignment = Pos.CENTER
+            label {
+                padding = box(20.px, 0.px)
+            }
         }
     }
 }

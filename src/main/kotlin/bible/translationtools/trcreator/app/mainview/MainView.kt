@@ -5,6 +5,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.application.Platform
 import javafx.stage.FileChooser
 import tornadofx.*
+import java.io.File
 
 class MainView : View("My View") {
 
@@ -15,6 +16,11 @@ class MainView : View("My View") {
         viewModel.trFileMessages.subscribe { message ->
             Platform.runLater {
                 showPopup(message.first, message.second)
+            }
+        }
+        viewModel.trFileComplete.subscribe { file ->
+            Platform.runLater {
+                saveAs(file)
             }
         }
     }
@@ -48,9 +54,19 @@ class MainView : View("My View") {
             }
         }
 
-        progressbar {
+        vbox {
+            addClass(MainViewStyles.progress)
             visibleWhen { viewModel.processingProperty }
+
+            progressbar {
+                progressProperty().bind(viewModel.progressProperty)
+                maxWidth = Double.MAX_VALUE
+                padding = insets(50, 0)
+            }
+
+            label(viewModel.progressTitleProperty)
         }
+
     }
 
     private fun chooseZip() {
@@ -69,6 +85,22 @@ class MainView : View("My View") {
         val directory = chooseDirectory(messages.getString("browse_project"))
         directory?.let {
             viewModel.trFromDirectory(it)
+        }
+    }
+
+    private fun saveAs(srcFile: File) {
+        val fileChooser = FileChooser()
+        fileChooser.title = messages.getString("save_tr_as")
+        fileChooser.initialFileName = "untitled.tr"
+        fileChooser.extensionFilters.addAll(
+            FileChooser.ExtensionFilter("TR Files", "*.tr")
+        )
+
+        val destFile = fileChooser.showSaveDialog(null)
+        if(destFile != null) {
+            viewModel.moveTrFile(srcFile, destFile)
+        } else {
+            viewModel.processingProperty.value = false
         }
     }
 
