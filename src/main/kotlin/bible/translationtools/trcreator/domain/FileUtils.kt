@@ -1,15 +1,15 @@
 package bible.translationtools.trcreator.domain
 
-import com.wycliffeassociates.io.ArchiveOfHolding
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.subjects.PublishSubject
+import org.wycliffeassociates.io.ArchiveOfHolding
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.zip.ZipFile
 
-class FileUtils(private val subject: PublishSubject<Double>? = null) {
+class FileUtils(private val publisher: PublishSubject<Double>? = null) {
     fun unzip(zip: File): Maybe<File> {
         return Maybe.fromCallable {
             val dest: File = Files.createTempDirectory("tr_unzip").toFile()
@@ -27,7 +27,7 @@ class FileUtils(private val subject: PublishSubject<Double>? = null) {
                     zip.getInputStream(entry).use { input ->
                         File(dest, entry.name).outputStream().use { output ->
                             val progress = (i++) / length
-                            subject?.onNext(progress)
+                            publisher?.onNext(progress)
                             input.copyTo(output)
                         }
                     }
@@ -43,14 +43,14 @@ class FileUtils(private val subject: PublishSubject<Double>? = null) {
         }
     }
 
-    fun createTr(dir: File, fromZip: Boolean): Maybe<File> {
+    fun createTr(dir: File): Maybe<File> {
         return Maybe.fromCallable {
             val aoh = ArchiveOfHolding(ArchiveOfHolding.OnProgressListener { progress ->
-                subject?.onNext(progress / 100.0)
+                publisher?.onNext(progress / 100.0)
             })
             aoh.createArchiveOfHolding(dir, true)
 
-            if(fromZip) dir.deleteRecursively()
+            dir.deleteRecursively()
             File(dir.parent, dir.name + ".tr")
         }
     }

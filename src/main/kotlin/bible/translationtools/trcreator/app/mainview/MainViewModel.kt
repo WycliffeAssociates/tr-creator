@@ -1,12 +1,14 @@
 package bible.translationtools.trcreator.app.mainview
 
 import bible.translationtools.trcreator.domain.FileUtils
+import org.apache.commons.io.FileUtils as FileUtilsIO
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import javafx.application.Platform
 import tornadofx.*
 import java.io.File
+import java.nio.file.Files
 
 class MainViewModel : ViewModel() {
     private var processing: Boolean by property(false)
@@ -20,7 +22,7 @@ class MainViewModel : ViewModel() {
 
     private lateinit var parentDir: File
 
-    val trFileMessages = PublishSubject.create<Pair<MessageDialog.TYPE, String>>()
+    val trFileMessages = PublishSubject.create<MessageDialog.Message>()
     val trFileComplete = PublishSubject.create<File>()
 
     private val progressSubject = PublishSubject.create<Double>()
@@ -33,17 +35,21 @@ class MainViewModel : ViewModel() {
 
     fun trFromZip(zip: File) {
         progress = 0.0
-        progressTitle = "Unzipping..."
+        progressTitle = messages.getString("unzipping")
         processing = true
         defineTargetDir(zip)
         FileUtils(progressSubject).unzip(zip)
             .doOnSuccess { dir ->
-                createTr(dir, true)
+                createTr(dir)
             }
             .onErrorComplete { error ->
                 println(error.message)
                 trFileMessages.onNext(
-                    Pair(MessageDialog.TYPE.ERROR, ""+error.message)
+                    MessageDialog.Message(
+                        MessageDialog.TYPE.ERROR,
+                        messages.getString("error_occurred"),
+                        ""+error.message
+                    )
                 )
                 true
             }
@@ -56,19 +62,25 @@ class MainViewModel : ViewModel() {
 
     fun trFromDirectory(dir: File) {
         processing = true
-        defineTargetDir(dir)
-        createTr(dir, false)
+        val target: File = Files.createTempDirectory("tr_temp").toFile()
+        FileUtilsIO.copyDirectoryToDirectory(dir, target)
+        defineTargetDir(target)
+        createTr(target)
     }
 
-    private fun createTr(dir: File, fromZip: Boolean) {
-        FileUtils(progressSubject).createTr(dir, fromZip)
+    private fun createTr(dir: File) {
+        FileUtils(progressSubject).createTr(dir)
             .doOnSuccess { trFile ->
                 trFileComplete.onNext(trFile)
             }
             .onErrorComplete { error ->
                 println(error.message)
                 trFileMessages.onNext(
-                    Pair(MessageDialog.TYPE.ERROR, ""+error.message)
+                    MessageDialog.Message(
+                        MessageDialog.TYPE.ERROR,
+                        messages.getString("error_occurred"),
+                        ""+error.message
+                    )
                 )
                 true
             }
@@ -78,7 +90,7 @@ class MainViewModel : ViewModel() {
             .doOnSubscribe {
                 Platform.runLater {
                     progress = 0.0
-                    progressTitle = "Generating TR file..."
+                    progressTitle = messages.getString("generating_tr")
                 }
             }
             .subscribeOn(Schedulers.computation())
@@ -96,13 +108,21 @@ class MainViewModel : ViewModel() {
                 onError = { error ->
                     processing = false
                     trFileMessages.onNext(
-                        Pair(MessageDialog.TYPE.ERROR, ""+error.message)
+                        MessageDialog.Message(
+                            MessageDialog.TYPE.ERROR,
+                            messages.getString("error_occurred"),
+                            ""+error.message
+                        )
                     )
                 },
                 onComplete = {
                     processing = false
                     trFileMessages.onNext(
-                        Pair(MessageDialog.TYPE.SUCCESS, messages.getString("success_message"))
+                        MessageDialog.Message(
+                            MessageDialog.TYPE.SUCCESS,
+                            messages.getString("success"),
+                            messages.getString("success_message")
+                        )
                     )
                 }
             )

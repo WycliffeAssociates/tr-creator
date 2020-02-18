@@ -1,11 +1,13 @@
 package bible.translationtools.trcreator.app.mainview
 
+import bible.translationtools.trcreator.domain.FileUtils
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.application.Platform
 import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
+import java.nio.file.Files
 
 class MainView : View("My View") {
 
@@ -15,7 +17,7 @@ class MainView : View("My View") {
         title = messages.getString("app_name")
         viewModel.trFileMessages.subscribe { message ->
             Platform.runLater {
-                showPopup(message.first, message.second)
+                showPopup(message.type, message.title, message.text)
             }
         }
         viewModel.trFileComplete.subscribe { file ->
@@ -104,12 +106,7 @@ class MainView : View("My View") {
         }
     }
 
-    private fun showPopup(type: MessageDialog.TYPE, message: String) {
-        val title = if(type == MessageDialog.TYPE.SUCCESS) {
-            messages.getString("success")
-        } else {
-            messages.getString("error_occurred")
-        }
+    private fun showPopup(type: MessageDialog.TYPE, title: String, message: String) {
         MessageDialog(type, title, message).show(root)
     }
 }

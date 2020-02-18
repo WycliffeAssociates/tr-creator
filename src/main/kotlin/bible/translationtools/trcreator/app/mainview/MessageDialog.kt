@@ -58,9 +58,15 @@ class MessageDialog(type: TYPE, title: String, message: String): JFXDialog() {
             scene.removeEventHandler(KeyEvent.KEY_PRESSED, tabKeyEventHandler)
         }
 
-        transitionType = JFXDialog.DialogTransition.CENTER
+        transitionType = DialogTransition.CENTER
         isOverlayClose = true
     }
 
     enum class TYPE { SUCCESS, ERROR }
+
+    data class Message(
+        val type: TYPE,
+        val title: String,
+        val text: String
+    )
 }
