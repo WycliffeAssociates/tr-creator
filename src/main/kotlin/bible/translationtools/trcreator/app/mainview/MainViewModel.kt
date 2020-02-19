@@ -21,6 +21,7 @@ class MainViewModel : ViewModel() {
     val progressTitleProperty = getProperty(MainViewModel::progressTitle)
 
     private lateinit var parentDir: File
+    private lateinit var initialFileName: String
 
     val trFileMessages = PublishSubject.create<MessageDialog.Message>()
     val trFileComplete = PublishSubject.create<File>()
@@ -37,6 +38,7 @@ class MainViewModel : ViewModel() {
         progress = 0.0
         progressTitle = messages.getString("unzipping")
         processing = true
+        initialFileName = zip.nameWithoutExtension
         defineTargetDir(zip)
         FileUtils(progressSubject).unzip(zip)
             .doOnSuccess { dir ->
@@ -62,6 +64,7 @@ class MainViewModel : ViewModel() {
 
     fun trFromDirectory(dir: File) {
         processing = true
+        initialFileName = dir.name
         val target: File = Files.createTempDirectory("tr_temp").toFile()
         FileUtilsIO.copyDirectoryToDirectory(dir, target)
         defineTargetDir(target)
@@ -126,5 +129,9 @@ class MainViewModel : ViewModel() {
                     )
                 }
             )
+    }
+
+    fun initialFileName(): String {
+        return "$initialFileName.tr"
     }
 }

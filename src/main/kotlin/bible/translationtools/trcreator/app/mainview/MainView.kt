@@ -1,13 +1,11 @@
 package bible.translationtools.trcreator.app.mainview
 
-import bible.translationtools.trcreator.domain.FileUtils
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.application.Platform
 import javafx.stage.FileChooser
 import tornadofx.*
 import java.io.File
-import java.nio.file.Files
 
 class MainView : View("My View") {
 
@@ -93,7 +91,7 @@ class MainView : View("My View") {
     private fun saveAs(srcFile: File) {
         val fileChooser = FileChooser()
         fileChooser.title = messages.getString("save_tr_as")
-        fileChooser.initialFileName = "untitled.tr"
+        fileChooser.initialFileName = viewModel.initialFileName()
         fileChooser.extensionFilters.addAll(
             FileChooser.ExtensionFilter("TR Files", "*.tr")
         )
