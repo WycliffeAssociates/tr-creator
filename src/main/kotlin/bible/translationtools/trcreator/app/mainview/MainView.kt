@@ -1,9 +1,8 @@
 package bible.translationtools.trcreator.app.mainview
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView
 import javafx.application.Platform
 import javafx.stage.FileChooser
+import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 import java.io.File
 
@@ -34,22 +33,26 @@ class MainView : View("My View") {
             hbox {
                 addClass(MainViewStyles.buttons)
                 vbox {
-                    add(FontAwesomeIconView(FontAwesomeIcon.FOLDER_ALT, "6em").apply {
+                    label(messages["directory"]).apply {
                         addClass(MainViewStyles.browse)
+
+                        graphic = FontIcon("gmi-folder:50:PURPLE")
+
                         setOnMouseClicked {
                             chooseDirectory()
                         }
-                    })
-                    label(messages.getString("directory"))
+                    }
                 }
                 vbox {
-                    add(FontAwesomeIconView(FontAwesomeIcon.FILE_ZIP_ALT, "6em").apply {
+                    label(messages["zip_file"]).apply {
                         addClass(MainViewStyles.browse)
+
+                        graphic = FontIcon("fa-file-zip-o:50:PURPLE")
+
                         setOnMouseClicked {
                             chooseZip()
                         }
-                    })
-                    label(messages.getString("zip_file"))
+                    }
                 }
             }
         }
