@@ -1,4 +1,4 @@
-package bible.translationtools.trcreator
+package org.bibletranslationtools.trcreator
 
 import java.io.*
 import java.util.zip.ZipEntry

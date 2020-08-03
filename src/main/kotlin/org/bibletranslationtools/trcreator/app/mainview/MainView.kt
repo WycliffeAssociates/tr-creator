@@ -1,4 +1,4 @@
-package bible.translationtools.trcreator.app.mainview
+package org.bibletranslationtools.trcreator.app.mainview
 
 import javafx.application.Platform
 import javafx.stage.FileChooser

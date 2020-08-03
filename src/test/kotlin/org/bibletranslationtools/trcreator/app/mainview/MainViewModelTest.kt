@@ -1,6 +1,6 @@
-package bible.translationtools.trcreator.app.mainview
+package org.bibletranslationtools.trcreator.app.mainview
 
-import bible.translationtools.trcreator.TestUtils
+import org.bibletranslationtools.trcreator.TestUtils
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import org.junit.Rule

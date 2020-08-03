@@ -1,4 +1,4 @@
-package bible.translationtools.trcreator.app.mainview
+package org.bibletranslationtools.trcreator.app.mainview
 
 import com.jfoenix.controls.JFXButton
 import com.jfoenix.controls.JFXDialog
@@ -37,7 +37,7 @@ class MessageDialog(type: TYPE, title: String, message: String): JFXDialog() {
                     maxHeight = Double.MAX_VALUE
                     style {
                         fontSize = 16.px
-                        textFill = if (type == MessageDialog.TYPE.SUCCESS) c("#05CC0E") else c("#f00")
+                        textFill = if (type == TYPE.SUCCESS) c("#05CC0E") else c("#f00")
                     }
                     vboxConstraints {
                         marginBottom = 10.0

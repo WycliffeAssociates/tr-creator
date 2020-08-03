@@ -1,14 +1,16 @@
-package bible.translationtools.trcreator.app.mainview
+package org.bibletranslationtools.trcreator.app.mainview
 
-import bible.translationtools.trcreator.domain.FileUtils
-import org.apache.commons.io.FileUtils as FileUtilsIO
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import javafx.application.Platform
-import tornadofx.*
+import org.bibletranslationtools.trcreator.domain.FileUtils
+import tornadofx.ViewModel
+import tornadofx.getProperty
+import tornadofx.property
 import java.io.File
 import java.nio.file.Files
+import org.apache.commons.io.FileUtils as FileUtilsIO
 
 class MainViewModel : ViewModel() {
     private var processing: Boolean by property(false)
@@ -50,7 +52,7 @@ class MainViewModel : ViewModel() {
                     MessageDialog.Message(
                         MessageDialog.TYPE.ERROR,
                         messages.getString("error_occurred"),
-                        ""+error.message
+                        "" + error.message
                     )
                 )
                 true
@@ -82,7 +84,7 @@ class MainViewModel : ViewModel() {
                     MessageDialog.Message(
                         MessageDialog.TYPE.ERROR,
                         messages.getString("error_occurred"),
-                        ""+error.message
+                        "" + error.message
                     )
                 )
                 true
@@ -114,7 +116,7 @@ class MainViewModel : ViewModel() {
                         MessageDialog.Message(
                             MessageDialog.TYPE.ERROR,
                             messages.getString("error_occurred"),
-                            ""+error.message
+                            "" + error.message
                         )
                     )
                 },

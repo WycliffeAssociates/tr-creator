@@ -1,7 +1,7 @@
-package bible.translationtools.trcreator.app
+package org.bibletranslationtools.trcreator.app
 
-import bible.translationtools.trcreator.app.mainview.MainView
-import bible.translationtools.trcreator.app.mainview.MainViewStyles
+import org.bibletranslationtools.trcreator.app.mainview.MainView
+import org.bibletranslationtools.trcreator.app.mainview.MainViewStyles
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import tornadofx.App

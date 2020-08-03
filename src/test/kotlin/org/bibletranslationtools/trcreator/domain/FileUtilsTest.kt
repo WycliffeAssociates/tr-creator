@@ -1,6 +1,6 @@
-package bible.translationtools.trcreator.domain
+package org.bibletranslationtools.trcreator.domain
 
-import bible.translationtools.trcreator.TestUtils
+import org.bibletranslationtools.trcreator.TestUtils
 import io.reactivex.observers.TestObserver
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +32,7 @@ class FileUtilsTest {
         val subscriber = TestObserver<File>()
         val srcDir: File = tempFolder.newFolder("testfolder")
 
-        FileUtils().createTr(srcDir, false)
+        FileUtils().createTr(srcDir)
             .subscribe(subscriber)
 
         subscriber.assertComplete()
@@ -45,7 +45,7 @@ class FileUtilsTest {
         val subscriber = TestObserver<File>()
         val srcDir: File = tempFolder.newFolder("testfolder")
 
-        FileUtils().createTr(srcDir, true)
+        FileUtils().createTr(srcDir)
             .subscribe(subscriber)
 
         subscriber.assertComplete()

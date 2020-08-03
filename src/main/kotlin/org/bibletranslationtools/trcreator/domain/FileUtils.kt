@@ -1,4 +1,4 @@
-package bible.translationtools.trcreator.domain
+package org.bibletranslationtools.trcreator.domain
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
