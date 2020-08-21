@@ -14,7 +14,7 @@ import javafx.scene.input.KeyEvent
 
 class MessageDialog(type: TYPE, title: String, message: String): JFXDialog() {
     init {
-        val okButton = JFXButton("Okay")
+        val okButton = JFXButton(FX.messages.getString("ok"))
         val tabKeyEventHandler = EventHandler<KeyEvent> { key ->
             if (key.code === KeyCode.TAB) key.consume()
         }

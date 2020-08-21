@@ -6,7 +6,7 @@ import org.kordamp.ikonli.javafx.FontIcon
 import tornadofx.*
 import java.io.File
 
-class MainView : View("My View") {
+class MainView : View() {
 
     private val viewModel: MainViewModel by inject()
 
@@ -75,7 +75,7 @@ class MainView : View("My View") {
     private fun chooseZip() {
         val zipFiles = chooseFile(
             messages.getString("browse_project"),
-            arrayOf(FileChooser.ExtensionFilter("Zip File", "*.zip")),
+            arrayOf(FileChooser.ExtensionFilter(messages.getString("zip_file"), "*.zip")),
             FileChooserMode.Single
         )
         for (file in zipFiles) {
@@ -96,7 +96,7 @@ class MainView : View("My View") {
         fileChooser.title = messages.getString("save_tr_as")
         fileChooser.initialFileName = viewModel.initialFileName()
         fileChooser.extensionFilters.addAll(
-            FileChooser.ExtensionFilter("TR Files", "*.tr")
+            FileChooser.ExtensionFilter(messages.getString("tr_files"), "*.tr")
         )
 
         val destFile = fileChooser.showSaveDialog(null)
